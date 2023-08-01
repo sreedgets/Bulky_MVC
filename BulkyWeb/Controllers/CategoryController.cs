@@ -31,17 +31,30 @@ namespace BulkyWeb.Controllers
         [HttpPost]
         public IActionResult Create(Category obj)
         {
-            //Add adds to a sort of list of tasks that need
-            //to be done in the db but doesn't commit any
-            //of them. It's good practice to gather up all
-            //of the changes you need and commit them at
-            //once.
-            _db.Categories.Add(obj);
+            if (obj.Name == obj.DisplayOrder.ToString())
+            {
+                ModelState.AddModelError("Name", "The Display Order cannot exactly match the Name.");
+            }
 
-            //Saves changes to the db
-            _db.SaveChanges();
+            //ModelState.IsValid takes the obj and checks
+            //that its values pass what is required by the data
+            //model
+            if (ModelState.IsValid)
+            {
+                //Add adds to a sort of list of tasks that need
+                //to be done in the db but doesn't commit any
+                //of them. It's good practice to gather up all
+                //of the changes you need and commit them at
+                //once.
+                _db.Categories.Add(obj);
 
-            return RedirectToAction("Index", "Category");
+                //Saves changes to the db
+                _db.SaveChanges();
+
+                return RedirectToAction("Index", "Category");
+            }
+
+            return View();
         }
     }
 }

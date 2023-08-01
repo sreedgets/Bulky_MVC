@@ -8,13 +8,16 @@
                     <h2 class="text-primary">Create Category</h2>
                     <hr/>
                 </div>
+                @* <div asp-validation-summary="All"></div> *@
                 <div class="mb-3">
                     <label asp-for="Name"></label>
-                    <input asp-for="Name" class="form-control" />
+                    <input asp-for="Name" class="form-control" placeholder="Enter category name here" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
                 </div>
                 <div class="mb-3">
                     <label asp-for="DisplayOrder"></label>
-                    <input asp-for="DisplayOrder" class="form-control" />
+                    <input asp-for="DisplayOrder" class="form-control" min="1" max="100" placeholder="Select display order here"/>
+                    <span asp-validation-for="DisplayOrder" class="text-danger"></span>
                 </div>
                 <div class="row">
                     <div class="col-6 col-md-3">
@@ -30,3 +33,9 @@
         </form>
     </div>
 </div>
+
+@section Scripts {
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}
