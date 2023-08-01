@@ -16,9 +16,32 @@ namespace BulkyWeb.Controllers
         public IActionResult Index()
         {
             List<Category> categories = _db.Categories.ToList();
-            //var categories = _db.Categories;
 
             return View(categories);
+        }
+
+        public IActionResult Create()
+        {
+            //You don't have to pass a new Category object here for the view to use. 
+            //If you declare a model on a view and nothing is passed from the controller
+            //an object will be created with empty values.
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Create(Category obj)
+        {
+            //Add adds to a sort of list of tasks that need
+            //to be done in the db but doesn't commit any
+            //of them. It's good practice to gather up all
+            //of the changes you need and commit them at
+            //once.
+            _db.Categories.Add(obj);
+
+            //Saves changes to the db
+            _db.SaveChanges();
+
+            return RedirectToAction("Index", "Category");
         }
     }
 }
