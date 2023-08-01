@@ -1,6 +1,8 @@
 ﻿using BulkyWeb.Data;
 using BulkyWeb.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.EntityFrameworkCore;
 
 namespace BulkyWeb.Controllers
 {
@@ -41,7 +43,7 @@ namespace BulkyWeb.Controllers
             //model
             if (ModelState.IsValid)
             {
-                //Add adds to a sort of list of tasks that need
+                //Adds to a sort of list of tasks that need
                 //to be done in the db but doesn't commit any
                 //of them. It's good practice to gather up all
                 //of the changes you need and commit them at
@@ -51,10 +53,105 @@ namespace BulkyWeb.Controllers
                 //Saves changes to the db
                 _db.SaveChanges();
 
+                //Passing key-value pair to the client side through TempData.
+                TempData["Success"] = "Category created successfully";
+
                 return RedirectToAction("Index", "Category");
             }
 
             return View();
+        }
+
+        //No Post attribute defaults to HttpGet.
+        //Set up the controller to receive the Category ID
+        //when the request is sent.
+        public IActionResult Edit(int? id)
+        {
+            //Check to see if the request is valid.
+            if (id == null || id == 0)
+            {
+                //Return the NotFound() page. Alternatively,
+                //you can return the View for an error page
+                //you have created.
+                return NotFound();
+            }
+
+            //Method 1 for retrieving one entry from the DB.
+            //Find() only works with the Primary Key
+            Category result = _db.Categories.Find(id);
+
+            //Method 2 for retrieving one entry from the DB.
+            //Linq operation
+            //Category result2 = _db.Categories.FirstOrDefault(u => u.Id == id);
+
+            //Method 3 for retrieving one entry from the DB.
+            //Linq operation
+            //Category result3 = _db.Categories.Where(u => u.Id == id).FirstOrDefault();
+
+            if (result == null)
+                return NotFound();
+
+            return View(result);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(Category obj)
+        {
+            if (ModelState.IsValid)
+            {
+                _db.Categories.Update(obj);
+                _db.SaveChanges();
+
+                TempData["Success"] = "Category updated successfully";
+
+                return RedirectToAction("Index", "Category");
+            }
+            return View();
+        }
+
+        public IActionResult Delete(int? id)
+        {
+            //Check to see if the request is valid.
+            if (id == null || id == 0)
+            {
+                //Return the NotFound() page. Alternatively,
+                //you can return the View for an error page
+                //you have created.
+                return NotFound();
+            }
+
+            //Method 1 for retrieving one entry from the DB.
+            //Find() only works with the Primary Key
+            Category result = _db.Categories.Find(id);
+
+            //Method 2 for retrieving one entry from the DB.
+            //Linq operation
+            //Category result2 = _db.Categories.FirstOrDefault(u => u.Id == id);
+
+            //Method 3 for retrieving one entry from the DB.
+            //Linq operation
+            //Category result3 = _db.Categories.Where(u => u.Id == id).FirstOrDefault();
+
+            if (result == null)
+                return NotFound();
+
+            return View(result);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        public IActionResult DeletePOST(int? id)
+        {
+            Category? obj = _db.Categories.Find(id);
+
+            if (obj == null)
+                return NotFound();
+
+            _db.Categories.Remove(obj);
+            _db.SaveChanges();
+
+            TempData["Success"] = "Category deleted successfully";
+
+            return RedirectToAction("Index", "Category");
         }
     }
 }
