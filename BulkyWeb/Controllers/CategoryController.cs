@@ -138,10 +138,10 @@ namespace BulkyWeb.Controllers
             return View(result);
         }
 
-        [HttpPost, ActionName("Delete")]
-        public IActionResult DeletePOST(int? id)
+        [HttpPost]
+        public IActionResult Delete(Category cat)
         {
-            Category? obj = _db.Categories.Find(id);
+            Category? obj = _db.Categories.Find(cat.Id);
 
             if (obj == null)
                 return NotFound();
@@ -153,5 +153,21 @@ namespace BulkyWeb.Controllers
 
             return RedirectToAction("Index", "Category");
         }
+
+        //[HttpPost, ActionName("Delete")]
+        //public IActionResult DeletePOST(int? id)
+        //{
+        //    Category? obj = _db.Categories.Find(id);
+
+        //    if (obj == null)
+        //        return NotFound();
+
+        //    _db.Categories.Remove(obj);
+        //    _db.SaveChanges();
+
+        //    TempData["Success"] = "Category deleted successfully";
+
+        //    return RedirectToAction("Index", "Category");
+        //}
     }
 }
