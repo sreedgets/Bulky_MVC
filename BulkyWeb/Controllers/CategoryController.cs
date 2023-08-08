@@ -2,7 +2,6 @@
 using Bulky.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using Microsoft.EntityFrameworkCore;
 
 namespace BulkyWeb.Controllers
 {
