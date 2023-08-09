@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace Bulky.DataAccess.Repository.IRepository
 {
+    //This is a generic interface.
     //When working with Genreics we won't know what the class type will be.
     //This will be a Generic type T where T is a class
     public interface IRepository<T> where T : class
