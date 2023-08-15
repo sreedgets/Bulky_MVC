@@ -4,23 +4,33 @@ using Bulky.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
-namespace BulkyWeb.Controllers
+namespace BulkyWeb.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     public class CategoryController : Controller
     {
         //private readonly ApplicationDbContext _db;
-        private readonly ICategoryRepository _categoryRepo;
+        //private readonly ICategoryRepository _categoryRepo;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public CategoryController(ICategoryRepository db)
+        public CategoryController(IUnitOfWork unitOfWork)
         {
+            //Applying Repository Pattern to use ApplicationDbContext in 
+            //CategoryRepository instead of the CategoryController.
             //_db = db;
-            _categoryRepo = db;
+
+            //Applying unit of work. Passing in IUnitOfWork which creates
+            //its own CategoryRepository instead of doing that here.
+            //_categoryRepo = db;
+
+            _unitOfWork = unitOfWork;
         }
 
         public IActionResult Index()
         {
             //List<Category> categories = _db.Categories.ToList();
-            List<Category> categories = _categoryRepo.GetAll().ToList();
+            //List<Category> categories = _categoryRepo.GetAll().ToList();
+            List<Category> categories = _unitOfWork.Category.GetAll().ToList();
 
             return View(categories);
         }
@@ -53,12 +63,14 @@ namespace BulkyWeb.Controllers
                 //once.
 
                 //_db.Categories.Add(obj);
-                _categoryRepo.Add(obj);
+                //_categoryRepo.Add(obj);
+                _unitOfWork.Category.Add(obj);
 
                 //Saves changes to the db
 
                 //_db.SaveChanges();
-                _categoryRepo.Save();
+                //_categoryRepo.Save();
+                _unitOfWork.Save();
 
                 //Passing key-value pair to the client side through TempData.
                 TempData["Success"] = "Category created successfully";
@@ -95,7 +107,9 @@ namespace BulkyWeb.Controllers
             //Linq operation
             //Category result3 = _db.Categories.Where(u => u.Id == id).FirstOrDefault();
 
-            Category? result = _categoryRepo.GetFirstOrDefault(u => u.Id == id);
+            //Category? result = _categoryRepo.GetFirstOrDefault(u => u.Id == id);
+
+            Category? result = _unitOfWork.Category.GetFirstOrDefault(u => u.Id == id);
 
             if (result == null)
                 return NotFound();
@@ -108,9 +122,12 @@ namespace BulkyWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                
-                _categoryRepo.Update(obj);
-                _categoryRepo.Save();
+
+                //_categoryRepo.Update(obj);
+                _unitOfWork.Category.Update(obj);
+
+                // _categoryRepo.Save();
+                _unitOfWork.Save();
 
                 TempData["Success"] = "Category updated successfully";
 
@@ -142,7 +159,10 @@ namespace BulkyWeb.Controllers
             //Linq operation
             //Category result3 = _db.Categories.Where(u => u.Id == id).FirstOrDefault();
 
-            Category? result = _categoryRepo.GetFirstOrDefault(u => u.Id == id);
+            //Applying Unit of Work
+            //Category? result = _categoryRepo.GetFirstOrDefault(u => u.Id == id);
+
+            Category? result = _unitOfWork.Category.GetFirstOrDefault(u => u.Id == id);
 
             if (result == null)
                 return NotFound();
@@ -154,13 +174,18 @@ namespace BulkyWeb.Controllers
         public IActionResult DeletePost(int? id)
         {
             //Category? obj = _db.Categories.Find(cat.Id);
-            Category? obj = _categoryRepo.GetFirstOrDefault(u => u.Id == id);
+            //Category? obj = _categoryRepo.GetFirstOrDefault(u => u.Id == id);
+
+            Category? obj = _unitOfWork.Category.GetFirstOrDefault(u => u.Id == id);
 
             if (obj == null)
                 return NotFound();
 
-            _categoryRepo.Remove(obj);
-            _categoryRepo.Save();
+            //_categoryRepo.Remove(obj);
+            _unitOfWork.Category.Remove(obj);
+
+            //_categoryRepo.Save();
+            _unitOfWork.Save();
 
             TempData["Success"] = "Category deleted successfully";
 

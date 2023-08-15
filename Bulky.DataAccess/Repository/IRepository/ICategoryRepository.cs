@@ -17,6 +17,7 @@ namespace Bulky.DataAccess.Repository.IRepository
         //know what object type we'll be working with.
         void Update(Category obj);
 
-        void Save();
+        //Moved to IUnitOfWork.cs
+        //void Save();
     }
 }
