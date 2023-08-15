@@ -15,11 +15,11 @@ namespace BulkyWeb.Areas.Admin.Controllers
 
         public CategoryController(IUnitOfWork unitOfWork)
         {
-            //Applying Repository Pattern to use ApplicationDbContext in 
+            //Commenting out to apply Repository Pattern to use ApplicationDbContext in 
             //CategoryRepository instead of the CategoryController.
             //_db = db;
 
-            //Applying unit of work. Passing in IUnitOfWork which creates
+            //Commenting out to apply unit of work. Passing in IUnitOfWork which creates
             //its own CategoryRepository instead of doing that here.
             //_categoryRepo = db;
 
@@ -54,6 +54,7 @@ namespace BulkyWeb.Areas.Admin.Controllers
             //ModelState.IsValid takes the obj and checks
             //that its values pass what is required by the data
             //model
+
             if (ModelState.IsValid)
             {
                 //Adds to a sort of list of tasks that need
