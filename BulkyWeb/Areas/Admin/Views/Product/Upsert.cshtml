@@ -1,0 +1,111 @@
+﻿@model ProductVM
+
+<div class="container">
+    <div class="row">
+        <form method="post" enctype="multipart/form-data">
+            @* Hidden inputs added for Product.Id and Product.ImageUrl to help the upsert controller
+            know if it's an update or insert. Id not null or 0 means create and ImageUrl not null
+            means there was an image previously *@
+            <input asp-for="Product.Id" hidden />
+            <input asp-for="Product.ImageUrl" hidden />
+            <div class="border p-3 mt-4">
+                <div class="row pb-2">
+                    <h2 class="text-primary">@(Model.Product.Id != 0 ? "Update" : "Create") Product</h2>
+                    <hr />
+                </div>
+                @* <div asp-validation-summary="All"></div> *@
+                <div class="row">
+                    <div class="col-9">
+                        <div class="mb-3">
+                            <label asp-for="Product.Title"></label>
+                            <input asp-for="Product.Title" class="form-control" placeholder="Enter product title here" />
+                            <span asp-validation-for="Product.Title" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Product.Description"></label>
+                            <textarea asp-for="Product.Description" class="form-control" placeholder="Enter product description here"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Product.ISBN"></label>
+                            <input asp-for="Product.ISBN" class="form-control" placeholder="Enter product ISBN here" />
+                            <span asp-validation-for="Product.ISBN" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Product.Author"></label>
+                            <input asp-for="Product.Author" class="form-control" placeholder="Enter product author here" />
+                            <span asp-validation-for="Product.Author" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Product.ListPrice"></label>
+                            <input asp-for="Product.ListPrice" class="form-control" min="1" max="1000" placeholder="Enter product list price here" />
+                            <span asp-validation-for="Product.ListPrice" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Product.Price"></label>
+                            <input asp-for="Product.Price" class="form-control" min="1" max="1000" placeholder="Enter product price for < 50" />
+                            <span asp-validation-for="Product.Price" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Product.Price50"></label>
+                            <input asp-for="Product.Price50" class="form-control" min="1" max="1000" placeholder="Enter product price for 50+" />
+                            <span asp-validation-for="Product.Price50" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Product.Price100"></label>
+                            <input asp-for="Product.Price100" class="form-control" min="1" max="1000" placeholder="Enter product price for 100+" />
+                            <span asp-validation-for="Product.Price100" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Product.CategoryId"></label>
+                            @* Populating Select dropdown with Category names using Viewbag
+                            <select asp-for="CategoryId" class="form-select" asp-items="ViewBag.CategoryList"> *@
+                            @* Populating Select dropdown with Category names using ViewData *@
+                            <select asp-for="Product.CategoryId" class="form-select" asp-items="@Model.CategoryList">
+                                <option disabled selected>--Select Category--</option>
+                            </select>
+                            <span asp-validation-for="Product.CategoryId" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Product.ImageUrl"></label>
+                            <input type="file" name="file" class="form-control" />
+                        </div>
+                        <div class="row">
+                            <div class="col-6 col-md-3">
+                                <a asp-controller="Product" asp-action="Index" class="btn btn-outline-secondary form-control">
+                                    <i class="bi bi-arrow-left"></i> Go Back
+                                </a>
+                            </div>
+                            <div class="col-6 col-md-3">
+                                <button type="submit" class="btn btn-primary form-control" style="border-width: 2px;">@(Model.Product.Id != 0 ? "Update" : "Create") <i class="bi bi-plus-circle"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <img src="@Model.Product.ImageUrl" width="100%" style="border-radius: 5px; border: 1px solid #bbb9b9;"/>
+                    </div>
+                </div>
+                
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        tinymce.init({
+            selector: 'textarea',
+            plugins: 'ai tinycomments mentions anchor autolink charmap codesample emoticons lists  table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed permanentpen footnotes advtemplate advtable advcode editimage tableofcontents mergetags powerpaste tinymcespellchecker autocorrect a11ychecker typography inlinecss',
+            toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | align lineheight | tinycomments | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
+            tinycomments_mode: 'embedded',
+            tinycomments_author: 'Author name',
+            mergetags_list: [
+                { value: 'First.Name', title: 'First Name' },
+                { value: 'Email', title: 'Email' },
+            ],
+            ai_request: (request, respondWith) => respondWith.string(() => Promise.reject("See docs to implement AI Assistant"))
+        });
+    </script>
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}

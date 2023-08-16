@@ -1,8 +1,8 @@
-﻿@model Product
+﻿@model ProductVM
 
 <div class="container">
     <div class="row">
-        <form method="post">
+        <form method="post" enctype="multipart/form-data">
             <div class="border p-3 mt-4">
                 <div class="row pb-2">
                     <h2 class="text-primary">Create Product</h2>
@@ -10,43 +10,57 @@
                 </div>
                 @* <div asp-validation-summary="All"></div> *@
                 <div class="mb-3">
-                    <label asp-for="Title"></label>
-                    <input asp-for="Title" class="form-control" placeholder="Enter product title here" />
-                    <span asp-validation-for="Title" class="text-danger"></span>
+                    <label asp-for="Product.Title"></label>
+                    <input asp-for="Product.Title" class="form-control" placeholder="Enter product title here" />
+                    <span asp-validation-for="Product.Title" class="text-danger"></span>
                 </div>
                 <div class="mb-3">
-                    <label asp-for="Description"></label>
-                    <textarea asp-for="Description" class="form-control" placeholder="Enter product description here"></textarea>
+                    <label asp-for="Product.Description"></label>
+                    <textarea asp-for="Product.Description" class="form-control" placeholder="Enter product description here"></textarea>
                 </div>
                 <div class="mb-3">
-                    <label asp-for="ISBN"></label>
-                    <input asp-for="ISBN" class="form-control" placeholder="Enter product ISBN here" />
-                    <span asp-validation-for="ISBN" class="text-danger"></span>
+                    <label asp-for="Product.ISBN"></label>
+                    <input asp-for="Product.ISBN" class="form-control" placeholder="Enter product ISBN here" />
+                    <span asp-validation-for="Product.ISBN" class="text-danger"></span>
                 </div>
                 <div class="mb-3">
-                    <label asp-for="Author"></label>
-                    <input asp-for="Author" class="form-control" placeholder="Enter product author here" />
-                    <span asp-validation-for="Author" class="text-danger"></span>
+                    <label asp-for="Product.Author"></label>
+                    <input asp-for="Product.Author" class="form-control" placeholder="Enter product author here" />
+                    <span asp-validation-for="Product.Author" class="text-danger"></span>
                 </div>
                 <div class="mb-3">
-                    <label asp-for="ListPrice"></label>
-                    <input asp-for="ListPrice" class="form-control" min="1" max="1000" placeholder="Enter product list price here" />
-                    <span asp-validation-for="ListPrice" class="text-danger"></span>
+                    <label asp-for="Product.ListPrice"></label>
+                    <input asp-for="Product.ListPrice" class="form-control" min="1" max="1000" placeholder="Enter product list price here" />
+                    <span asp-validation-for="Product.ListPrice" class="text-danger"></span>
                 </div>
                 <div class="mb-3">
-                    <label asp-for="Price"></label>
-                    <input asp-for="Price" class="form-control" min="1" max="1000" placeholder="Enter product price for < 50" />
-                    <span asp-validation-for="Price" class="text-danger"></span>
+                    <label asp-for="Product.Price"></label>
+                    <input asp-for="Product.Price" class="form-control" min="1" max="1000" placeholder="Enter product price for < 50" />
+                    <span asp-validation-for="Product.Price" class="text-danger"></span>
                 </div>
                 <div class="mb-3">
-                    <label asp-for="Price50"></label>
-                    <input asp-for="Price50" class="form-control" min="1" max="1000" placeholder="Enter product price for 50+" />
-                    <span asp-validation-for="Price50" class="text-danger"></span>
+                    <label asp-for="Product.Price50"></label>
+                    <input asp-for="Product.Price50" class="form-control" min="1" max="1000" placeholder="Enter product price for 50+" />
+                    <span asp-validation-for="Product.Price50" class="text-danger"></span>
                 </div>
                 <div class="mb-3">
-                    <label asp-for="Price100"></label>
-                    <input asp-for="Price100" class="form-control" min="1" max="1000" placeholder="Enter product price for 100+" />
-                    <span asp-validation-for="Price100" class="text-danger"></span>
+                    <label asp-for="Product.Price100"></label>
+                    <input asp-for="Product.Price100" class="form-control" min="1" max="1000" placeholder="Enter product price for 100+" />
+                    <span asp-validation-for="Product.Price100" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Product.CategoryId"></label>
+                    @* Populating Select dropdown with Category names using Viewbag
+                    <select asp-for="CategoryId" class="form-select" asp-items="ViewBag.CategoryList"> *@
+                    @* Populating Select dropdown with Category names using ViewData *@
+                    <select asp-for="Product.CategoryId" class="form-select" asp-items="@Model.CategoryList">
+                        <option disabled selected>--Select Category--</option>
+                    </select>
+                    <span asp-validation-for="Product.CategoryId" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Product.ImageUrl"></label>
+                    <input type="file"class="form-control"/>
                 </div>
                 <div class="row">
                     <div class="col-6 col-md-3">
