@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace Bulky.Models.ViewModels
 {
+    //This View Model exists to pass information from a
+    //Product Model and Category Model without using
+    //ViewBag or ViewData.
     public class ProductVM
     {
         //This prop will contain the Product object 

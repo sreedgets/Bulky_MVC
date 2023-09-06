@@ -13,6 +13,7 @@ namespace BulkyWeb.Areas.Admin.Controllers
 
         private readonly IWebHostEnvironment _webHostEnvironment;
 
+        //The IWebHostEnvironment dependency injection is automatically added to projects by .Net Core
         public ProductController(IUnitOfWork unitOfWork, IWebHostEnvironment webHostEnvironment)
         {
             _unitOfWork = unitOfWork;
@@ -21,7 +22,7 @@ namespace BulkyWeb.Areas.Admin.Controllers
 
         public IActionResult Index()
         {
-            List<Product> products = _unitOfWork.Product.GetAll().ToList();
+            List<Product> products = _unitOfWork.Product.GetAll("Category").ToList();
 
             return View(products);
         }
@@ -74,14 +75,13 @@ namespace BulkyWeb.Areas.Admin.Controllers
             {
                 //If no id then return create view.
                 productVM.Product = new Product();
-
-                return View(productVM);
             }
             else
             {
                 productVM.Product = _unitOfWork.Product.GetFirstOrDefault(c => c.Id == id);
-                return View(productVM);
             }
+
+            return View(productVM);
         }
 
         //Changing to Upsert
@@ -167,39 +167,41 @@ namespace BulkyWeb.Areas.Admin.Controllers
             }
         }
 
-        public IActionResult Edit(int? id)
-        {
-            if (id == null || id == 0)
-            {
-                return NotFound();
-            }
+        //Commenting out because it was added to upsert
+        //public IActionResult Edit(int? id)
+        //{
+        //    if (id == null || id == 0)
+        //    {
+        //        return NotFound();
+        //    }
 
-            Product? result = _unitOfWork.Product.GetFirstOrDefault(u => u.Id == id);
+        //    Product? result = _unitOfWork.Product.GetFirstOrDefault(u => u.Id == id);
 
-            if (result == null)
-                return NotFound();
+        //    if (result == null)
+        //        return NotFound();
 
-            return View(result);
-        }
+        //    return View(result);
+        //}
 
-        [HttpPost]
-        public IActionResult Edit(Product product)
-        {
-            if (ModelState.IsValid)
-            {
+        //Commenting out because it was added to upsert
+        //[HttpPost]
+        //public IActionResult Edit(Product product)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
 
-                //_categoryRepo.Update(obj);
-                _unitOfWork.Product.Update(product);
+        //        //_categoryRepo.Update(obj);
+        //        _unitOfWork.Product.Update(product);
 
-                // _categoryRepo.Save();
-                _unitOfWork.Save();
+        //        // _categoryRepo.Save();
+        //        _unitOfWork.Save();
 
-                TempData["Success"] = "Product updated successfully";
+        //        TempData["Success"] = "Product updated successfully";
 
-                return RedirectToAction("Index", "Product");
-            }
-            return View();
-        }
+        //        return RedirectToAction("Index", "Product");
+        //    }
+        //    return View();
+        //}
 
         public IActionResult Delete(int? id)
         {
